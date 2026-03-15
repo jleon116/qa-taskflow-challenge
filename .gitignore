@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+*.db
+.venv/
+venv/
+node_modules/
+.DS_Store
+*.log
+test-results/
+playwright-report/
+allure-results/

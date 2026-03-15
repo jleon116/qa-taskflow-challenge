@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow — Gestión de Tareas</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <h1 class="logo">📋 TaskFlow</h1>
+            <span class="version">v1.2.0</span>
+        </div>
+        <div class="header-right">
+            <button id="btn-new-task" class="btn btn-primary">+ Nueva Tarea</button>
+            <button id="btn-export" class="btn btn-secondary">Exportar</button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Stats Bar -->
+        <section class="stats-bar" id="stats-bar">
+            <div class="stat-card">
+                <span class="stat-number" id="stat-total">0</span>
+                <span class="stat-label">Total</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="stat-todo">0</span>
+                <span class="stat-label">Por Hacer</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="stat-progress">0</span>
+                <span class="stat-label">En Progreso</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="stat-done">0</span>
+                <span class="stat-label">Completadas</span>
+            </div>
+            <div class="stat-card stat-overdue">
+                <span class="stat-number" id="stat-overdue">0</span>
+                <span class="stat-label">Vencidas</span>
+            </div>
+        </section>
+
+        <!-- Filters -->
+        <section class="filters">
+            <div class="filter-group">
+                <label for="filter-project">Proyecto:</label>
+                <select id="filter-project">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filter-status">Estado:</label>
+                <select id="filter-status">
+                    <option value="">Todos</option>
+                    <option value="todo">Por Hacer</option>
+                    <option value="in_progress">En Progreso</option>
+                    <option value="in_review">En Revisión</option>
+                    <option value="done">Completada</option>
+                    <option value="cancelled">Cancelada</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filter-priority">Prioridad:</label>
+                <select id="filter-priority">
+                    <option value="">Todas</option>
+                    <option value="critical">Crítica</option>
+                    <option value="high">Alta</option>
+                    <option value="medium">Media</option>
+                    <option value="low">Baja</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <input type="text" id="filter-search" placeholder="Buscar tareas..." class="search-input">
+            </div>
+        </section>
+
+        <!-- Task List -->
+        <section class="task-list" id="task-list">
+            <p class="loading">Cargando tareas...</p>
+        </section>
+
+        <!-- Pagination -->
+        <section class="pagination" id="pagination"></section>
+    </main>
+
+    <!-- New Task Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal" id="task-modal">
+            <div class="modal-header">
+                <h2 id="modal-title">Nueva Tarea</h2>
+                <button class="btn-close" id="btn-close-modal">&times;</button>
+            </div>
+            <form id="task-form">
+                <div class="form-group">
+                    <label for="task-title">Título *</label>
+                    <input type="text" id="task-title" required maxlength="300">
+                    <!-- 🐛 UI BUG: maxlength is 300 but no character counter shown -->
+                </div>
+                <div class="form-group">
+                    <label for="task-description">Descripción</label>
+                    <textarea id="task-description" rows="4"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-project">Proyecto *</label>
+                        <select id="task-project" required>
+                            <option value="">Seleccionar...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-priority">Prioridad</label>
+                        <select id="task-priority">
+                            <option value="medium">Media</option>
+                            <option value="low">Baja</option>
+                            <option value="high">Alta</option>
+                            <option value="critical">Crítica</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-assignee">Asignado a</label>
+                        <select id="task-assignee">
+                            <option value="">Sin asignar</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-due-date">Fecha límite</label>
+                        <!-- 🐛 UI BUG: No min date set — allows selecting past dates -->
+                        <input type="date" id="task-due-date">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="task-tags">Etiquetas (separadas por coma)</label>
+                    <input type="text" id="task-tags" placeholder="frontend, urgente, sprint-3">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="btn-cancel">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Task Detail Modal -->
+    <div class="modal-overlay" id="detail-overlay">
+        <div class="modal modal-detail" id="detail-modal">
+            <div class="modal-header">
+                <h2 id="detail-title">Detalle de Tarea</h2>
+                <button class="btn-close" id="btn-close-detail">&times;</button>
+            </div>
+            <div id="detail-content"></div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

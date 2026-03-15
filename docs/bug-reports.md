@@ -171,3 +171,36 @@ La API debería sanitizar o bloquear contenido HTML/JavaScript en los campos de 
 **Impacto**
 
 Esto podría permitir ataques **XSS**, ejecutando scripts maliciosos en el navegador de otros usuarios si el valor se renderiza en el frontend.
+
+### BUG-005: API permite crear tareas con tags vacíos
+
+- **Severidad:** Media
+- **Componente:** API
+- **Endpoint:** POST /api/tasks
+
+**Pasos para reproducir**
+
+1. Ir a http://localhost:8080/docs
+2. Ejecutar POST /api/tasks
+3. Enviar el siguiente request:
+
+{
+"title": "Tarea tags test",
+"description": "test",
+"project_id": "ecab4908-9664-4858-8ce1-53c83bd0a5e6",
+"reporter_id": "ecab4908-9664-4858-8ce1-53c83bd0a5e6",
+"priority": "medium",
+"tags": ["", "", ""]
+}
+
+**Resultado actual**
+
+La API crea la tarea y guarda los tags vacíos.
+
+**Resultado esperado**
+
+La API debería validar que los tags tengan contenido válido o rechazar tags vacíos.
+
+**Impacto**
+
+Permite almacenar datos inválidos en el sistema, afectando la organización y filtrado de tareas.
